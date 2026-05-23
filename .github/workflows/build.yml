@@ -21,20 +21,14 @@ jobs:
       - name: Build Vite app
         run: npm run build
 
-      - name: Install Capacitor
-        run: npm install @capacitor/core @capacitor/cli @capacitor/android
-
-      - name: Init Capacitor (if not set up)
-        run: npx cap init "Pov2" "com.pov2.app" --web-dir=dist || true
-
-      - name: Add Android
-        run: npx cap add android || true
-
-      - name: Sync
+      - name: Sync Capacitor
         run: npx cap sync android
 
-      - name: Make gradlew executable
-        run: chmod +x android/gradlew
+      - name: Fix gradle wrapper jar
+        run: |
+          cd android
+          gradle wrapper --gradle-version 8.9
+          chmod +x gradlew
 
       - name: Build APK
         run: cd android && ./gradlew assembleDebug
